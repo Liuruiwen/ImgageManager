@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#eeeeee"
+    android:layout_height="match_parent"
+    tools:context="com.ruiwenliu.imgagemanager.PreviewActivity">
+
+    <com.ruiwenliu.rxcarouselview.CarouselView
+        android:layout_width="wrap_content"
+        android:id="@+id/carouselview"
+        app:layout_auto_basewidth="height"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        android:id="@+id/tv_count"
+        android:text="0/0"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_bg_red"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_alignParentRight="true"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:layout_margin="15dp"
+        android:id="@+id/tv_confirm"
+        android:text="确认"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shape_bg_red"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+</RelativeLayout>

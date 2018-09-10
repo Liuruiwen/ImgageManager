@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ruiwenliu.imgagemanager.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/lay_context"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/act_camera"
+            android:text="系统相机"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/act_camera_crop"
+            android:text="拍照并裁剪"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/act_album_crop"
+            android:text="相册并裁剪"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/act_custom"
+            android:text="自定义相册"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_below="@id/lay_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/act_img"
+        />
+
+</RelativeLayout>
