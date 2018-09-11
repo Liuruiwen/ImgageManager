@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ruiwenliu.imgagemanager.adapter.AlbumAdapter;
 import com.ruiwenliu.imgagemanager.bean.AlbumBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class AlbumActivity extends AppCompatActivity {
     TextView tvCount;
     private AlbumAdapter mAdapter;
     private int ivCount;
+    private final int TYPE_REQUEST_CODE=1;
 
     public static Intent getIntent(Context context, int count) {
         return new Intent(context, AlbumActivity.class).putExtra("count", count);
@@ -58,6 +61,23 @@ public class AlbumActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==TYPE_REQUEST_CODE && resultCode==RESULT_OK){
+            if(mAdapter!=null && mAdapter.getData().size()>0){
+                List<AlbumBean>  listAlbum=mAdapter.getSelectData();
+                getIntent().putExtra("list", (Serializable) listAlbum);
+                setResult(RESULT_OK,getIntent());
+            }else {
+                List<AlbumBean>  listAlbum = (List<AlbumBean>) getIntent().getSerializableExtra("list");
+                getIntent().putExtra("list", (Serializable) listAlbum);
+                setResult(RESULT_OK,getIntent());
+            }
+            finish();
+        }
     }
 
     private List<AlbumBean> getAlbumData() {
@@ -89,7 +109,7 @@ public class AlbumActivity extends AppCompatActivity {
                 break;
             case R.id.tv_preview:
                 if(mAdapter!=null && mAdapter.getSelectNumber()>0){
-                    startActivity(PreviewActivity.getIntent(this,mAdapter.getSelectData()));
+                    startActivityForResult(PreviewActivity.getIntent(this,mAdapter.getSelectData()),TYPE_REQUEST_CODE);
                 }
                 break;
         }

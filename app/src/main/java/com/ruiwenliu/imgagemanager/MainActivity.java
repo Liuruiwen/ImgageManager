@@ -4,12 +4,18 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ruiwenliu.imgagemanager.adapter.AlbumAdapter;
+import com.ruiwenliu.imgagemanager.bean.AlbumBean;
 import com.ruiwenliu.imgagemanager.presenter.PhotoPresenter;
 import com.ruiwenliu.imgagemanager.util.glide.GlideImgManager;
 import com.ruiwenliu.imgagemanager.util.permission.RxPermission;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,9 +25,12 @@ import io.reactivex.functions.Consumer;
 public class MainActivity extends PhotoActivity<PhotoPresenter> {
 
     private final int ivCount = 9;//你要获取图片的数量
-
+    private final int TYPE_REQIEST_CODE = 6;
     @BindView(R.id.act_img)
     ImageView mImg;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    private AlbumAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +38,7 @@ public class MainActivity extends PhotoActivity<PhotoPresenter> {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -57,6 +67,20 @@ public class MainActivity extends PhotoActivity<PhotoPresenter> {
                     GlideImgManager.getInstance(this).loadImage(presenter.gerCameraStoreUrl(), mImg);
                 }
                 break;
+            case TYPE_REQIEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    List<AlbumBean> listAlbum = (List<AlbumBean>) data.getSerializableExtra("list");
+                    if (mAdapter == null) {
+                        mAdapter = new AlbumAdapter();
+                        recyclerview.setLayoutManager(new GridLayoutManager(this, 4));
+                        recyclerview.setAdapter(mAdapter);
+                        mAdapter.setNewData(listAlbum);
+                    }else {
+                        mAdapter.setNewData(listAlbum);
+                    }
+                }
+
+                break;
         }
     }
 
@@ -81,6 +105,7 @@ public class MainActivity extends PhotoActivity<PhotoPresenter> {
         }
     }
 
+
     /**
      * 打开相机做权限处理
      *
@@ -98,7 +123,7 @@ public class MainActivity extends PhotoActivity<PhotoPresenter> {
                 presenter.openAlbum(true);//true裁剪、false不裁减
                 break;
             case R.id.act_custom:
-                startActivity(AlbumActivity.getIntent(this, ivCount));
+                startActivityForResult(AlbumActivity.getIntent(this, ivCount), TYPE_REQIEST_CODE);
                 break;
         }
     }

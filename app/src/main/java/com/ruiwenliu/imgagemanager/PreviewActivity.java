@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +13,6 @@ import com.ruiwenliu.imgagemanager.bean.AlbumBean;
 import com.ruiwenliu.imgagemanager.util.glide.GlideImgManager;
 import com.ruiwenliu.rxcarouselview.CarouselView;
 import com.ruiwenliu.rxcarouselview.inter.OnPageChangeListerer;
-import com.zhy.autolayout.utils.AutoUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,21 +39,21 @@ public class PreviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
         ButterKnife.bind(this);
-        listAlbum= (List<AlbumBean>) getIntent().getSerializableExtra("list");
+        listAlbum = (List<AlbumBean>) getIntent().getSerializableExtra("list");
         carouselview.setLoop(1);
-        tvCount.setText(String.format("%1$s%2$d","1/",listAlbum.size()));
-         carouselview.setCarouselData( getData());
-         carouselview.setOnPageChangeListerer(new OnPageChangeListerer() {
-             @Override
-             public void onPageChange(int i) {
-                 tvCount.setText(String.format("%1$d%2$s%3$d",i+1,"/",listAlbum.size()));
-             }
-         });
+        tvCount.setText(String.format("%1$s%2$d", "1/", listAlbum.size()));
+        carouselview.setCarouselData(getData());
+        carouselview.setOnPageChangeListerer(new OnPageChangeListerer() {
+            @Override
+            public void onPageChange(int i) {
+                tvCount.setText(String.format("%1$d%2$s%3$d", i + 1, "/", listAlbum.size()));
+            }
+        });
     }
 
-    private List<ImageView> getData(){
-        List<ImageView> list=new ArrayList<>();
-        for(AlbumBean bean:listAlbum){
+    private List<ImageView> getData() {
+        List<ImageView> list = new ArrayList<>();
+        for (AlbumBean bean : listAlbum) {
             ImageView imageView = (ImageView) LayoutInflater.from(this).inflate(R.layout.item_imagely, null);
             GlideImgManager.getInstance(this).loadImage(bean.albumUrl, imageView);
             list.add(imageView);
@@ -61,8 +61,20 @@ public class PreviewActivity extends AppCompatActivity {
 
         return list;
     }
-    @OnClick(R.id.tv_confirm)
-    public void onViewClicked() {
 
+    @OnClick({R.id.iv_back, R.id.tv_confirm})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.tv_confirm:
+                if(getIntent()!=null &&listAlbum!=null && listAlbum.size()>0){
+                    getIntent().putExtra("list", (Serializable) listAlbum);
+                    setResult(RESULT_OK,getIntent());
+                }
+                finish();
+                break;
+        }
     }
 }
